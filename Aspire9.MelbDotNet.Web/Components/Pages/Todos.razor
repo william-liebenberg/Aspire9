@@ -1,0 +1,44 @@
+﻿@page "/todos"
+@using Aspire9.MelbDotNet.Shared
+@attribute [StreamRendering(true)]
+@attribute [OutputCache(Duration = 5)]
+
+@inject TodoApiClient TodoApi
+
+<PageTitle>Todos</PageTitle>
+
+<h1>Todos</h1>
+
+<p>This component demonstrates showing data loaded from a backend API service.</p>
+
+@if (todos == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var todo in todos)
+            {
+                <tr>
+                    <td>@todo.Id</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private TodoEntry[]? todos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        todos = await TodoApi.GetTodosAsync();
+    }
+}
